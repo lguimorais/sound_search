@@ -1,0 +1,59 @@
+# 🔹 Sistema
+.DS_Store
+Thumbs.db
+
+# 🔹 IDEs / Editores
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# (Opcional - descomente se quiser ignorar)
+.vscode/
+
+# 🔹 Flutter / Dart
+.dart_tool/
+.packages
+.flutter-plugins-dependencies
+.pub/
+.pub-cache/
+build/
+coverage/
+
+# 🔹 Logs e temporários
+*.log
+*.tmp
+*.swp
+
+# 🔹 Android
+android/.gradle/
+android/app/build/
+android/local.properties
+*.keystore
+*.jks
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# 🔹 iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+
+# 🔹 Web build
+build/web/
+
+# 🔹 Arquivos sensíveis
+.env
+.env.*
+
+# 🔹 Firebase (se usar)
+google-services.json
+GoogleService-Info.plist
+
+# 🔹 Obfuscação / símbolos
+app.*.symbols
+app.*.map.json
