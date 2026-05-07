@@ -17,7 +17,7 @@ class SoundSearchApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // MaterialApp: configura rotas, tema e título do app
     return MaterialApp(
-      title: 'SoundSearch',
+      title: AppStrings.appName,
       debugShowCheckedModeBanner: false, // Remove o banner vermelho "DEBUG"
       theme: ThemeData(
         // useMaterial3: visual moderno do Material Design 3
