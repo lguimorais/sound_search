@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sound_search/core/constants/app_colors.dart';
+import 'package:sound_search/core/constants/app_strings.dart';
 
 // main() é o ponto de entrada do app — como o int main() do C
 // runApp() pega o widget raiz e coloca na tela
@@ -21,13 +23,12 @@ class SoundSearchApp extends StatelessWidget {
         // useMaterial3: visual moderno do Material Design 3
         useMaterial3: true,
         colorScheme: ColorScheme.dark(
-          primary: const Color(
-            0xFF6C63FF,
-          ), // Roxo vibrante — do AppColors do documento
-          secondary: const Color(0xFFFF6584), // Rosa coral
-          surface: const Color(0xFF1E1E2E), // Superfície dos cards
+          primary:
+              AppColors.primary, // Roxo vibrante — do AppColors do documento
+          secondary: AppColors.accent, // Rosa coral
+          surface: AppColors.onSurface, // Superfície dos cards
         ),
-        scaffoldBackgroundColor: const Color(0xFF0F0F1A), // Fundo escuro
+        scaffoldBackgroundColor: AppColors.background, // Fundo escuro
       ),
       home: const SearchScreen(),
     );
@@ -48,9 +49,9 @@ class SearchScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          '🎵 SoundSearch',
+          AppStrings.appName,
           style: TextStyle(
-            color: Color(0xFF6C63FF), // primary
+            color: AppColors.primary, // primary
             fontSize: 24,
             fontWeight: FontWeight.w900,
           ),
@@ -61,19 +62,19 @@ class SearchScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.music_note_outlined, size: 80, color: Color(0xFF6C63FF)),
+            Icon(Icons.music_note_outlined, size: 80, color: AppColors.primary),
             SizedBox(height: 16), // Espaçador — equivale a margin
             Text(
-              'Descubra novas músicas',
+              AppStrings.playlistEmpty,
               style: TextStyle(
-                color: Color(0xFF9E9E9E), // textSecondary
+                color: AppColors.textSecondary, // textSecondary
                 fontSize: 16,
               ),
             ),
             SizedBox(height: 8),
             Text(
               'A busca vem na próxima fase 🚀',
-              style: TextStyle(color: Color(0xFF9E9E9E), fontSize: 13),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
           ],
         ),
