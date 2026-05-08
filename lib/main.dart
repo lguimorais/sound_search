@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sound_search/core/constants/app_colors.dart';
 import 'package:sound_search/core/constants/app_strings.dart';
+import 'package:sound_search/data/datasources/itunes_remote_datasource.dart';
 
 // main() é o ponto de entrada do app — como o int main() do C
 // runApp() pega o widget raiz e coloca na tela
 void main() {
   runApp(const SoundSearchApp());
+  
 }
 
 // StatelessWidget: widget que nunca muda depois de construído
