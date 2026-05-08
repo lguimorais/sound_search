@@ -24,19 +24,21 @@ class DatabaseHelper {
   }
 
   Future<Void> _createTables(Database db, int version) async {
-    await db.execute('''CREATE TABLE playlist (
-                       trackId INTEGER PRIMARY KEY,
-trackName TEXT NOT NULL,
-artistName TEXT NOT NULL,
-collectionName TEXT NOT NULL,
-artworkUrl TEXT NOT NULL,
-previewUrl TEXT,
-genre TEXT NOT NULL,
-trackTimeMillis INTEGER NOT NULL,
-trackPrice REAL NOT NULL,
-isExplicit INTEGER NOT NULL DEFAULT 0,
-suggestToRadio INTEGER NOT NULL DEFAULT 0
-)
-''');
+    await db.execute('''
+            CREATE TABLE playlist (
+                trackId INTEGER PRIMARY KEY,
+                trackName TEXT NOT NULL,
+                artistName TEXT NOT NULL,
+                collectionName TEXT NOT NULL,
+                artworkUrl TEXT NOT NULL,
+                previewUrl TEXT,
+                genre TEXT NOT NULL,
+                trackTimeMillis INTEGER NOT NULL,
+                trackPrice REAL NOT NULL,
+                isExplicit INTEGER NOT NULL DEFAULT 0,
+                suggestToRadio INTEGER NOT NULL DEFAULT 0
+                )
+                ''');
   }
 }
+
