@@ -11,8 +11,8 @@ class DatabaseHelper {
 
   Database? _database;
 
-  Future<Database> get Database async {
-    _database ??= await _database();
+  Future<Database> get database async {
+    _database ??= await _initDatabase();
     return _database!;
   }
 
@@ -40,5 +40,36 @@ class DatabaseHelper {
                 )
                 ''');
   }
-}
 
+  Future<void> insertTrack(TrackModel track) async {
+    final db = await database;
+    await db.insert(
+      'playlist',
+      track.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<TrackModel>> getAllTracks() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('playlist');
+    return maps.map((map) => TrackModel.fromMap(map)).toList();
+  }
+
+  Future<void> deleteTrack(int trackId) async {
+    final db = await database;
+    await db.delete('playlist', where: 'trackId = ?', whereArgs: [trackId]);
+  }
+
+  Future<bool> isTrackSaved(int trackId) async {
+    final db = await database;
+    final result = await db.query(
+      'playlist',
+      where: 'trackId = ?',
+      whereArgs: [trackId],
+      limit: 1,
+    );
+
+    return result.isNotEmpty;
+  }
+}
