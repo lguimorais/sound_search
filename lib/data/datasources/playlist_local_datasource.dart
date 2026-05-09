@@ -23,7 +23,7 @@ class DatabaseHelper {
     return await openDatabase(path, version: 1, onCreate: _createTables);
   }
 
-  Future<Void> _createTables(Database db, int version) async {
+  Future<void> _createTables(Database db, int version) async {
     await db.execute('''
             CREATE TABLE playlist (
                 trackId INTEGER PRIMARY KEY,
