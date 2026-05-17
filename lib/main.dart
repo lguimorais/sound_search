@@ -14,8 +14,10 @@ import 'package:sound_search/presentation/providers/playlist_provider.dart';
 import 'package:sound_search/presentation/providers/search_provider.dart';
 import 'package:sound_search/presentation/screens/playlist_screen.dart';
 import 'package:sound_search/presentation/screens/search_screen.dart';
+import 'package:sound_search/presentation/screens/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const SoundSearchApp());
 }
 
@@ -56,13 +58,13 @@ class SoundSearchApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: AppColors.background,
         ),
-        home: const MainNavigation(),
+        home: const SplashScreen(),
       ),
     );
   }
 }
 
-// Navegação principal com abas =[=´cara nao aguento mais nao enxergar 
+// Navegação principal com abas =[=´cara nao aguento mais nao enxergar
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
 
@@ -74,26 +76,15 @@ class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
   // IndexedStack mantém o estado de cada aba ao trocar
-  final List<Widget> _screens = const [
-    SearchScreen(),
-    PlaylistScreen(),
-  ];
+  final List<Widget> _screens = const [SearchScreen(), PlaylistScreen()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: AppColors.surface,
-              width: 1,
-            ),
-          ),
+          border: Border(top: BorderSide(color: AppColors.surface, width: 1)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
