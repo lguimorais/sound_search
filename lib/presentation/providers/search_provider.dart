@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/datasources/itunes_remote_datasource.dart';
 import '../../domain/entities/track.dart';
 import '../../domain/usecases/search_tracks_usecase.dart';
@@ -9,7 +10,9 @@ class SearchProvider extends ChangeNotifier {
   final SearchTracksUseCase _searchTracksUseCase;
 
   SearchProvider({required SearchTracksUseCase searchTracksUseCase})
-      : _searchTracksUseCase = searchTracksUseCase;
+      : _searchTracksUseCase = searchTracksUseCase {
+    _loadPreferences(); // carrega preferências salvas ao criar o provider
+  }
 
   SearchState _state = SearchState.initial;
   List<Track> _results = [];
@@ -17,11 +20,33 @@ class SearchProvider extends ChangeNotifier {
   SearchType _searchType = SearchType.song;
   bool? _explicitFilter;
 
+  // Chave usada no SharedPreferences
+  static const String _keySearchType = 'searchType';
+
   SearchState get state => _state;
   List<Track> get results => _results;
   String get errorMessage => _errorMessage;
   SearchType get searchType => _searchType;
   bool? get explicitFilter => _explicitFilter;
+
+  // Carrega o tipo de busca salvo anteriormente
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_keySearchType);
+    if (saved != null) {
+      _searchType = SearchType.values.firstWhere(
+        (t) => t.name == saved,
+        orElse: () => SearchType.song,
+      );
+      notifyListeners();
+    }
+  }
+
+  // Salva o tipo de busca atual
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keySearchType, _searchType.name);
+  }
 
   Future<void> search(String query) async {
     if (query.trim().isEmpty) return;
@@ -50,6 +75,7 @@ class SearchProvider extends ChangeNotifier {
 
   void setSearchType(SearchType type) {
     _searchType = type;
+    _savePreferences(); // persiste ao trocar o tipo
     notifyListeners();
   }
 

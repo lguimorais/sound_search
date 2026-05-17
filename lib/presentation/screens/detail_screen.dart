@@ -4,6 +4,7 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../domain/entities/track.dart';
 import '../providers/playlist_provider.dart';
+import '../widgets/audio_player_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   final Track track;
@@ -113,6 +114,12 @@ class _DetailScreenState extends State<DetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _InfoGrid(track: track),
+
+                  const SizedBox(height: 16),
+              
+                  //  Player de preview] naisadfjsd faaaaaaaaaa
+                  if (track.previewUrl != null)
+                    AudioPlayerWidget(previewUrl: track.previewUrl!),
 
                   const SizedBox(height: 20),
 
