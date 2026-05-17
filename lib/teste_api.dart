@@ -14,7 +14,7 @@ void main() async {
 
   try {
     final List<TrackModel> tracks = await datasource.searchTracks(
-      query: 'Beatles',
+      query: 'Gustavo Mioto',
       type: SearchType.song, // busca por músicas
       explicitFilter: null, // sem filtro de explícito
     );
