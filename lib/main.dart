@@ -62,7 +62,7 @@ class SoundSearchApp extends StatelessWidget {
   }
 }
 
-// Navegação principal com abas — estilo YouTube Music
+// Navegação principal com abas =[=´cara nao aguento mais nao enxergar 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
 
