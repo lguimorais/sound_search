@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.2.2
   just_audio: ^0.9.36
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -102,3 +103,22 @@ flutter_launcher_icons:
   min_sdk_android: 21
   web:
     generate: false
+
+flutter_native_splash:
+  # Cor de fundo — mesma do AppColors.background (0xFF0F0F1A)
+  color: "#0F0F1A"
+
+  # Sua imagem centralizada
+  image: assets/images/logo.jpeg
+  # Android 12+ tem um sistema próprio de splash
+  android_12:
+    color: "#0F0F1A"
+    image: assets/images/logo.jpeg
+    # Tamanho do ícone no Android 12+ (em dp)
+    icon_background_color: "#0F0F1A"
+
+  # iOS
+  ios: true
+
+  # Web (pode deixar false se não vai usar)
+  web: false

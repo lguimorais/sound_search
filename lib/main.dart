@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:sound_search/core/constants/app_colors.dart';
@@ -17,7 +18,8 @@ import 'package:sound_search/presentation/screens/search_screen.dart';
 import 'package:sound_search/presentation/screens/splash_screen.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); // ← novo
   runApp(const SoundSearchApp());
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sound_search/main.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-
+    FlutterNativeSplash.remove();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
