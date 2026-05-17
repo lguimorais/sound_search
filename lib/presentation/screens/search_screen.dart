@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../providers/search_provider.dart';
+import '../widgets/search_bar_widget.dart';
 import '../widgets/track_card.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -47,19 +48,22 @@ class _SearchScreenState extends State<SearchScreen> {
               style: const TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 hintText: AppStrings.searchHint,
-                hintStyle: const TextStyle(color: AppColors.textSecondary),
+                hintStyle:
+                    const TextStyle(color: AppColors.textSecondary),
                 filled: true,
                 fillColor: AppColors.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon:
-                    const Icon(Icons.search, color: AppColors.textSecondary),
+                prefixIcon: const Icon(Icons.search,
+                    color: AppColors.textSecondary),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send, color: AppColors.primary),
                   onPressed: () {
-                    context.read<SearchProvider>().search(_controller.text);
+                    context
+                        .read<SearchProvider>()
+                        .search(_controller.text);
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -71,7 +75,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
 
-          // Resultado baseado no estado
+          // chips de tipo + switch explíc nao to conseguindo enxergar o teclado pra apagar e arrumarso sei as teclas decorardas, nao sei o apagar aaaa
+
+            const SearchBarWidget(),
+
+          // Resultados
           Expanded(
             child: Consumer<SearchProvider>(
               builder: (context, provider, _) {
@@ -136,7 +144,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     return ListView.builder(
                       itemCount: provider.results.length,
                       itemBuilder: (context, index) {
-                        return TrackCard(track: provider.results[index]);
+                        return TrackCard(
+                            track: provider.results[index]);
                       },
                     );
                 }
