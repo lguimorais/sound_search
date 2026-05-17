@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/utils/responsive.dart';
 import '../providers/playlist_provider.dart';
 import '../widgets/playlist_card.dart';
 
@@ -16,14 +17,16 @@ class PlaylistScreen extends StatelessWidget {
         builder: (context, provider, _) {
           return CustomScrollView(
             slivers: [
-              // Header estilo YouTube Music — com contador
               SliverAppBar(
                 backgroundColor: AppColors.background,
                 expandedHeight: 120,
                 pinned: true,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+                  titlePadding: EdgeInsets.only(
+                    left: Responsive.horizontalPadding(context),
+                    bottom: 16,
+                  ),
                   title: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,11 +51,11 @@ class PlaylistScreen extends StatelessWidget {
                   ),
                 ),
                 actions: [
-                  // Ícone de rádio com contador de sugestões
-                  if (provider.playlist
-                      .any((t) => t.suggestToRadio))
+                  if (provider.playlist.any((t) => t.suggestToRadio))
                     Padding(
-                      padding: const EdgeInsets.only(right: 16),
+                      padding: EdgeInsets.only(
+                        right: Responsive.horizontalPadding(context),
+                      ),
                       child: Row(
                         children: [
                           const Icon(Icons.radio,
@@ -72,7 +75,6 @@ class PlaylistScreen extends StatelessWidget {
                 ],
               ),
 
-              // Lista vazia
               if (provider.isLoading)
                 const SliverFillRemaining(
                   child: Center(
@@ -83,40 +85,46 @@ class PlaylistScreen extends StatelessWidget {
               else if (provider.playlist.isEmpty)
                 SliverFillRemaining(
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.queue_music_outlined,
-                            size: 80, color: AppColors.primary),
-                        const SizedBox(height: 16),
-                        const Text(
-                          AppStrings.playlistEmpty,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 15,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Responsive.horizontalPadding(context),
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.queue_music_outlined,
+                              size: 80, color: AppColors.primary),
+                          SizedBox(height: 16),
+                          Text(
+                            AppStrings.playlistEmpty,
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 15,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Busque músicas e salve aqui!',
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 13,
+                          SizedBox(height: 8),
+                          Text(
+                            'Busque músicas e salve aqui!',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 )
               else
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return PlaylistCard(
-                          track: provider.playlist[index]);
-                    },
-                    childCount: provider.playlist.length,
+                SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => PlaylistCard(
+                          track: provider.playlist[index]),
+                      childCount: provider.playlist.length,
+                    ),
                   ),
                 ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/utils/responsive.dart';
 import '../../domain/entities/track.dart';
 import '../providers/playlist_provider.dart';
 import '../screens/detail_screen.dart';
@@ -13,13 +14,17 @@ class PlaylistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final artworkSize = Responsive.artworkSize(context);
+    final fontSize = Responsive.cardFontSize(context);
+    final hPadding = Responsive.horizontalPadding(context);
+
     return Dismissible(
       key: Key('playlist_${track.trackId}'),
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: EdgeInsets.symmetric(horizontal: hPadding, vertical: 6),
         decoration: BoxDecoration(
           color: AppColors.error,
           borderRadius: BorderRadius.circular(12),
@@ -38,16 +43,12 @@ class PlaylistCard extends StatelessWidget {
         );
       },
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => DetailScreen(track: track),
-            ),
-          );
-        },
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => DetailScreen(track: track)),
+        ),
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          margin: EdgeInsets.symmetric(horizontal: hPadding, vertical: 6),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: AppColors.surface,
@@ -55,17 +56,16 @@ class PlaylistCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Capa
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
                   track.artworkUrl,
-                  width: 56,
-                  height: 56,
+                  width: artworkSize,
+                  height: artworkSize,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    width: 56,
-                    height: 56,
+                    width: artworkSize,
+                    height: artworkSize,
                     color: AppColors.background,
                     child: const Icon(Icons.music_note,
                         color: AppColors.primary),
@@ -73,16 +73,15 @@ class PlaylistCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              // Nome e artista
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       track.trackName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 14,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
@@ -91,14 +90,13 @@ class PlaylistCard extends StatelessWidget {
                     const SizedBox(height: 3),
                     Text(
                       track.artistName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 12,
+                        fontSize: fontSize - 2,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Badge "Sugestão para a rádio"
                     if (track.suggestToRadio) ...[
                       const SizedBox(height: 5),
                       Container(
@@ -124,16 +122,13 @@ class PlaylistCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              // Duração + ícone deslize
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     track.formattedDuration,
                     style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 11,
-                    ),
+                        color: AppColors.textSecondary, fontSize: 11),
                   ),
                   const SizedBox(height: 6),
                   const Icon(Icons.swipe_left_outlined,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/responsive.dart';
 import '../../domain/entities/track.dart';
 import '../screens/detail_screen.dart';
 
@@ -10,17 +11,19 @@ class TrackCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final artworkSize = Responsive.artworkSize(context);
+    final fontSize = Responsive.cardFontSize(context);
+    final hPadding = Responsive.horizontalPadding(context);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => DetailScreen(track: track),
-          ),
+          MaterialPageRoute(builder: (_) => DetailScreen(track: track)),
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: EdgeInsets.symmetric(horizontal: hPadding, vertical: 6),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: AppColors.surface,
@@ -28,16 +31,17 @@ class TrackCard extends StatelessWidget {
         ),
         child: Row(
           children: [
+            // Capa
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
                 track.artworkUrl,
-                width: 56,
-                height: 56,
+                width: artworkSize,
+                height: artworkSize,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  width: 56,
-                  height: 56,
+                  width: artworkSize,
+                  height: artworkSize,
                   color: AppColors.background,
                   child: const Icon(Icons.music_note,
                       color: AppColors.primary),
@@ -45,15 +49,16 @@ class TrackCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
+            // Textos
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     track.trackName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textPrimary,
-                      fontSize: 14,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
@@ -62,9 +67,9 @@ class TrackCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     track.artistName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
-                      fontSize: 12,
+                      fontSize: fontSize - 2,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -72,9 +77,9 @@ class TrackCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     track.collectionName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
-                      fontSize: 11,
+                      fontSize: fontSize - 3,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -83,6 +88,7 @@ class TrackCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            // Duração + play
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

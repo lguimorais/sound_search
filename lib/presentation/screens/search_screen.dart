@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../providers/search_provider.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/track_card.dart';
 
@@ -56,8 +57,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: const Icon(Icons.search,
-                    color: AppColors.textSecondary),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: AppColors.textSecondary,
+                ),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.send, color: AppColors.primary),
                   onPressed: () {
@@ -75,81 +78,174 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
 
-          // chips de tipo + switch explíc nao to conseguindo enxergar o teclado pra apagar e arrumarso sei as teclas decorardas, nao sei o apagar aaaa
+          // Chips de tipo + switch explícito
+          const SearchBarWidget(),
 
-            const SearchBarWidget(),
-
-          // Resultados
+          // Estados da busca
           Expanded(
             child: Consumer<SearchProvider>(
               builder: (context, provider, _) {
                 switch (provider.state) {
+                  // ── Estado inicial ──
                   case SearchState.initial:
-                    return const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.music_note_outlined,
-                              size: 80, color: AppColors.primary),
-                          SizedBox(height: 16),
-                          Text(
-                            'Busque por uma música ou artista',
-                            style: TextStyle(
-                              color: AppColors.textSecondary,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return _buildInitialState();
 
+                  // ── Loading com widget animado (Fase 16) ──
                   case SearchState.loading:
-                    return const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primary),
-                    );
+                    return const LoadingWidget();
 
+                  // ── Erro com mensagem específica (Fase 16) ──
                   case SearchState.error:
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.wifi_off,
-                              size: 60, color: AppColors.error),
-                          const SizedBox(height: 16),
-                          Text(
-                            provider.errorMessage,
-                            style: const TextStyle(
-                              color: AppColors.textSecondary,
-                              fontSize: 15,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    );
+                    return _buildErrorState(provider.errorMessage);
 
+                  // ── Sucesso ──
                   case SearchState.success:
                     if (provider.results.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          AppStrings.noResults,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 15,
-                          ),
-                        ),
-                      );
+                      return _buildEmptyResults();
                     }
                     return ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 16),
                       itemCount: provider.results.length,
                       itemBuilder: (context, index) {
-                        return TrackCard(
-                            track: provider.results[index]);
+                        return TrackCard(track: provider.results[index]);
                       },
                     );
                 }
               },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Estado inicial: convite para buscar =[[[]]] <- preciso nem dizer ne?
+  Widget _buildInitialState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.music_note_outlined,
+            size: 80,
+            color: AppColors.primary.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Descubra músicas',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Busque por músicas, artistas ou álbuns',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Estado de erro: ícone + mensagem específica + botão retry
+  Widget _buildErrorState(String message) {
+    // Detecta se é erro de conexão ou outro tipo
+    final isConnectionError = message.contains('internet') ||
+        message.contains('conexão');
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              isConnectionError ? Icons.wifi_off : Icons.error_outline,
+              size: 64,
+              color: AppColors.error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              isConnectionError
+                  ? AppStrings.noConnection
+                  : 'Algo deu errado',
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 13,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            // Botão de tentar novamente
+            OutlinedButton.icon(
+              onPressed: () {
+                if (_controller.text.isNotEmpty) {
+                  context
+                      .read<SearchProvider>()
+                      .search(_controller.text);
+                }
+              },
+              icon: const Icon(Icons.refresh, color: AppColors.primary),
+              label: const Text(
+                'Tentar novamente',
+                style: TextStyle(color: AppColors.primary),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.primary),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── Nenhum resultado encontrado ──
+  Widget _buildEmptyResults() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.search_off,
+            size: 64,
+            color: AppColors.textSecondary.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            AppStrings.noResults,
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Tente outro termo ou tipo de busca',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
             ),
           ),
         ],
