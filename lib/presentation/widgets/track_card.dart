@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../domain/entities/track.dart';
+import '../screens/detail_screen.dart';
 
 class TrackCard extends StatelessWidget {
   final Track track;
-  final VoidCallback? onTap;
 
-  const TrackCard({super.key, required this.track, this.onTap});
+  const TrackCard({super.key, required this.track});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DetailScreen(track: track),
+          ),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         padding: const EdgeInsets.all(12),
@@ -21,7 +28,6 @@ class TrackCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Capa do álbum
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
@@ -33,12 +39,12 @@ class TrackCard extends StatelessWidget {
                   width: 56,
                   height: 56,
                   color: AppColors.background,
-                  child: const Icon(Icons.music_note, color: AppColors.primary),
+                  child: const Icon(Icons.music_note,
+                      color: AppColors.primary),
                 ),
               ),
             ),
             const SizedBox(width: 12),
-            // Nome e artista
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +83,6 @@ class TrackCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            // Duração + ícone play
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

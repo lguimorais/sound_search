@@ -6,7 +6,11 @@ import 'package:sound_search/core/constants/app_strings.dart';
 import 'package:sound_search/data/datasources/itunes_remote_datasource.dart';
 import 'package:sound_search/data/datasources/playlist_local_datasource.dart';
 import 'package:sound_search/data/repositories/music_repository_impl.dart';
+import 'package:sound_search/domain/usecases/delete_track_usecase.dart';
+import 'package:sound_search/domain/usecases/get_playlist_usecase.dart';
+import 'package:sound_search/domain/usecases/save_track_usecase.dart';
 import 'package:sound_search/domain/usecases/search_tracks_usecase.dart';
+import 'package:sound_search/presentation/providers/playlist_provider.dart';
 import 'package:sound_search/presentation/providers/search_provider.dart';
 import 'package:sound_search/presentation/screens/search_screen.dart';
 
@@ -30,6 +34,13 @@ class SoundSearchApp extends StatelessWidget {
           create: (_) => SearchProvider(
             searchTracksUseCase: SearchTracksUseCase(repository: repository),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PlaylistProvider(
+            saveTrackUseCase: SaveTrackUseCase(repository: repository),
+            getPlaylistUseCase: GetPlaylistUseCase(repository: repository),
+            deleteTrackUseCase: DeleteTrackUseCase(repository: repository),
+          )..loadPlaylist(),
         ),
       ],
       child: MaterialApp(
